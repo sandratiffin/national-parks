@@ -140,9 +140,13 @@ resource "aws_instance" "initial-peer" {
   associate_public_ip_address = true
 
   tags {
-    Name      = "${var.aws_key_pair_name}_${random_id.national_parks_id.hex}_initial_peer"
-    X-Dept    = "SCE"
-    X-Contact = "${var.aws_key_pair_name} <maintainer@example.com>"
+    Name          = "${var.aws_key_pair_name}_${random_id.national_parks_id.hex}_initial_peer"
+    X-Dept        = "${var.tag_dept}"
+    X-Customer    = "${var.tag_customer}"
+    X-Project     = "${var.tag_project}"
+    X-Application = "${var.tag_application}"
+    X-Contact     = "${var.tag_contact}"
+    X-TTL         = "${var.tag_ttl}"
   }
 
   provisioner "file" {
@@ -186,9 +190,13 @@ resource "aws_instance" "np-mongodb" {
   associate_public_ip_address = true
 
   tags {
-    Name      = "${var.aws_key_pair_name}_${random_id.national_parks_id.hex}_np_mongodb"
-    X-Dept    = "SCE"
-    X-Contact = "${var.aws_key_pair_name} <maintainer@example.com>"
+    Name          = "${var.aws_key_pair_name}_${random_id.national_parks_id.hex}_np_mongodb"
+    X-Dept        = "${var.tag_dept}"
+    X-Customer    = "${var.tag_customer}"
+    X-Project     = "${var.tag_project}"
+    X-Application = "${var.tag_application}"
+    X-Contact     = "${var.tag_contact}"
+    X-TTL         = "${var.tag_ttl}"
   }
 
   provisioner "file" {
@@ -211,7 +219,7 @@ resource "aws_instance" "np-mongodb" {
       "sudo systemctl daemon-reload",
       "sudo systemctl start hab-sup",
       "sudo systemctl enable hab-sup",
-      "sudo hab svc load ${var.habitat_origin}/np-mongodb --group prod --strategy at-once",
+      "sudo hab svc load ${var.habitat_origin}/np-mongodb --group ${var.group} --channel ${var.release_channel} --strategy ${var.update_strategy}",
     ]
   }
 }
@@ -230,9 +238,13 @@ resource "aws_instance" "national-parks" {
   associate_public_ip_address = true
 
   tags {
-    Name      = "${var.aws_key_pair_name}_${random_id.national_parks_id.hex}_national_parks"
-    X-Dept    = "SCE"
-    X-Contact = "${var.aws_key_pair_name}"
+    Name          = "${var.aws_key_pair_name}_${random_id.national_parks_id.hex}_national_parks"
+    X-Dept        = "${var.tag_dept}"
+    X-Customer    = "${var.tag_customer}"
+    X-Project     = "${var.tag_project}"
+    X-Application = "${var.tag_application}"
+    X-Contact     = "${var.tag_contact}"
+    X-TTL         = "${var.tag_ttl}"
   }
 
   provisioner "file" {
@@ -255,7 +267,7 @@ resource "aws_instance" "national-parks" {
       "sudo systemctl daemon-reload",
       "sudo systemctl start hab-sup",
       "sudo systemctl enable hab-sup",
-      "sudo hab svc load ${var.habitat_origin}/national-parks --group prod --bind database:np-mongodb.prod --strategy at-once",
+      "sudo hab svc load ${var.habitat_origin}/national-parks --group ${var.group} --channel ${var.release_channel} --strategy ${var.update_strategy} --bind database:np-mongodb.${var.group}",
     ]
   }
 }

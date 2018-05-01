@@ -1,22 +1,25 @@
-variable "aws_region" {}
+variable "azure_region" {}
 
-variable "aws_profile" {
-  default = "default"
+variable "azure_public_key_path" {}
+variable "azure_private_key_path {}
+
+variable "azure_image_user" {
+  default = "azureuser"
 }
 
-variable "aws_key_pair_file" {}
+variable "azure_image_password" {
+  default = "Azur3pa$$word"
+}
 
-variable "aws_key_pair_name" {}
+variable "azure_sub_id" {
+  default = "xxxxxxx-xxxx-xxxx-xxxxxxxxxx"
+}
 
-variable "aws_image_user" {
-  default = "ubuntu"
+variable "azure_tenant_id" {
+  default = "xxxxxxx-xxxx-xxxx-xxxxxxxxxx"
 }
 
 variable "habitat_origin" {}
-
-variable "env" {
-  default = "dev"
-}
 
 variable "bldr_url" {
   default = "https://bldr.habitat.sh"
